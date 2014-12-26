@@ -1,0 +1,15 @@
+{
+  "name": "atom-alfred",
+  "version": "1.0.0",
+  "main": "main.js",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "underscore": "^1.7.0",
+    "zepto": "0.0.4"
+  }
+}
