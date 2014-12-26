@@ -1,5 +1,6 @@
 app = require 'app'
 _ = require 'underscore'
+fs = require 'fs'
 # require('remote').require('browser-window').addDevToolsExtension('/node_modules/react-devtools')
 
 
@@ -8,6 +9,30 @@ BrowserWindow = require 'browser-window'
 # BrowserWindow.addDevToolsExtension('react-devtools')
 
 require('crash-reporter').start()
+
+
+ec=null
+ce=null
+
+parseDict=(err,data)->
+
+		# lines=data.split('\r\n')
+		# console.log lines[0]
+		# console.log lines[1]
+		ce='11'
+
+stream=null
+loadDict=()->
+	stream=fs.createReadStream("#{__dirname}/dict/ce.txt"),{
+		flags: 'r'
+		encoding: 'utf-8'
+		fd:null
+		bufferSize:1
+	})
+	# fs.readFile "#{__dirname}/dict/ce.txt",parseDict
+
+loadDict()
+
 
 mainWindow=null
 
@@ -35,4 +60,7 @@ app.on 'ready',()->
 
 app.on 'keydown',()->
 	mainWindow.setSize(500,500)
+
+
+
 
