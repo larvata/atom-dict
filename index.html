@@ -7,13 +7,82 @@
 	<style>
 	.search-box{
 		font-size: 3em;
+		width: 480px;
+	}
+
+	.word{
+		font-size:1.6em;
+	}
+
+	.pron{
+		font-family: 'lucida sans unicode';
+		float:right;
+		font-size:16px;
+
+	}
+
+	.mean{
+		font-size: 14px;
+		overflow: hidden;
+		height: 40px;
+	}
+
+	.result{
+		padding: 5px;
+		margin: 5px 0px 5px 0px;
+		height: 62px;
+		background: rgb(230,230,230);
+		border-radius: 4px;
+	}
+
+	.result-part{
+		margin: 5px 0px 5px 0px;
+		overflow: auto;
+
+	}
+
+	body{
+		overflow: hidden;
 	}
 	</style>
 </head>
 <body>
-    <input type="text" class="search-box">
+
+	<div class="search-part">
+		<input type="text" class="search-box">
+	</div>
+    <div class="result-part">
+
+    </div>
+
+
+
+
 
 	<script src="node_modules/zepto/zepto.min.js"></script>
+	<script src="scripts/zepto-extras.js"></script>
+	<script src="node_modules/underscore/underscore-min.js"></script>
+
+
+	<script id="resultTpl" type="text/template">
+
+		<% _.each(results,function(ret){ %>
+			<div class="result">
+				<div>
+				<span class="word"><%=ret.word%></span>
+				<span class="pron"><%=ret.pron%></span>
+				</div>
+				<div class="mean">
+				<%=ret.mean%>
+				</div>
+			</div>
+		<% }); %>
+
+	</script>
+
     <script src="scripts/app.js"></script>
+
+
+
 </body>
 </html>
