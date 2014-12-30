@@ -118,17 +118,28 @@ app.on 'ready',()->
 	mainWindow.on 'closed',()->
 		mainWindow=null
 
+
+
 	mainWindow.on 'blur',()->
+		setBrowserVisibility(false)
 		# app.emit('windowVisible',false)
 
 
 
+
 	showWindowHotkey=globalShortcut.register 'shift+ctrl+space',()->
-		mainWindow.show()
+		setBrowserVisibility(true)
 
 	mainWindow.openDevTools()
 
 
+setBrowserVisibility=(visibility)->
+	if visibility
+		mainWindow.show()
+		app.emit('onBrowserWindowShow')
+	else
+		mainWindow.hide()
+		app.emit('onBrowserWindowHide')
 
 
 
@@ -148,11 +159,7 @@ app.on 'keyup',(keyword)->
 
 
 app.on 'windowVisible',(visibility)->
-	if visibility
-		mainWindow.show()
-	else
-		mainWindow.hide()
-
+	setBrowserVisibility(visibility)
 
 app.on 'windowResultHeight',(height)->
 	height+=mainWindowSize.height

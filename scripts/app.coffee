@@ -4,15 +4,18 @@ app=remote.require 'app'
 
 
 
+$(document).on 'keyup',(e)->
+	if e.keyCode is 27
+		$('.search-box').val("")
+		$('.search-box').focus()
+		app.emit('updateSearchResult',[])
+		app.emit 'windowVisible',false
+
 
 
 $('.search-box').on 'keyup',(e)->
-
 	# console.log e
-	if e.keyCode is 27
-		app.emit('windowVisible',false)
-	else
-		app.emit('keyup',@value);
+	app.emit('keyup',@value);
 
 app.on 'updateSearchResult',(results)->
 	tpl=$("#resultTpl").html()
@@ -36,5 +39,12 @@ app.on 'updateSearchResult',(results)->
 	console.log "new height #{resultHeight}"
 
 	app.emit('windowResultHeight',resultHeight)
+
+
+app.on 'onBrowserWindowShow',()->
+
+
+
+
 
 
