@@ -32,9 +32,6 @@ phoneticConvert=(src)->
 			return "[#{ele}]"
 		).join(' ')
 
-
-
-
 	src=src
 	.replace(/A/g,'æ')
 	.replace(/B/g,'ɑ')
@@ -59,7 +56,8 @@ phoneticConvert=(src)->
 
 stream=null
 dictLines=[]
-loadDict=()->
+
+loadYodaoDict=()->
 	streamOptions={encoding:'utf8'}
 	stream=fs.createReadStream("#{__dirname}/dict/ec.txt")
 
@@ -85,7 +83,16 @@ loadDict=()->
 		console.log('loadDict fin.')
 	# fs.readFile "#{__dirname}/dict/ce.txt",parseDict
 
-loadDict()
+loadEdictDict=()->
+	streamOptions={encoding:'jp-euc'}
+	stream=fs.createReadStream("#{__dirname}/dict/edict2")
+
+
+
+loadDict=(dictFileName,encoding)->
+
+
+loadYodaoDict()
 
 
 
@@ -149,7 +156,7 @@ app.on 'keyup',(keyword)->
 
 	unless keyword.length is 0
 		ret=_.chain(dictLines).filter(
-			(dict)->return dict.word.indexOf(keyword)==0).first(5).value()
+			(dict)->return dict.word.indexOf(keyword.toLowerCase())==0).first(5).value()
 	else
 		ret=[]
 

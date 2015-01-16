@@ -2,18 +2,18 @@ remote = require 'remote'
 
 app=remote.require 'app'
 
+clipboard = require 'clipboard'
 
+searchBox=$('.search-box')
 
 $(document).on 'keyup',(e)->
 	if e.keyCode is 27
-		$('.search-box').val("")
-		$('.search-box').focus()
+		searchBox.focus()
 		app.emit('updateSearchResult',[])
 		app.emit 'windowVisible',false
 
 
-
-$('.search-box').on 'keyup',(e)->
+searchBox.on 'keyup',(e)->
 	# console.log e
 	app.emit('keyup',@value);
 
@@ -41,10 +41,13 @@ app.on 'updateSearchResult',(results)->
 	app.emit('windowResultHeight',resultHeight)
 
 
+app.on 'onBrowserWindowHide',()->
+	searchBox.val("")
+
+
 app.on 'onBrowserWindowShow',()->
-
-
-
-
-
+	word=clipboard.readText('string').trim()
+	if /^\w+$/.test(word)
+		searchBox.val(word)
+		app.emit('keyup',word)
 
