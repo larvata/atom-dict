@@ -9,11 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fuse.js": "^1.2.2",
     "underscore": "^1.7.0",
     "zepto": "0.0.4"
   },
   "devDependencies": {
     "coffee-script": "^1.8.0",
-    "gulp": "^3.8.10"
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-debug": "^2.0.0",
+    "gulp-if": "^1.2.5"
   }
 }

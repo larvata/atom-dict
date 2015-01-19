@@ -1,3 +1,5 @@
 node_modules/
 scripts/*.js
 /main.js
+gulpcoffee.js
+build/

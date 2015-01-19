@@ -50,4 +50,5 @@ app.on 'onBrowserWindowShow',()->
 	if /^\w+$/.test(word)
 		searchBox.val(word)
 		app.emit('keyup',word)
+		searchBox[0].select()
 
