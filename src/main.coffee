@@ -137,7 +137,7 @@ app.on 'ready',()->
 	showWindowHotkey=globalShortcut.register 'shift+ctrl+space',()->
 		setBrowserVisibility(true)
 
-	mainWindow.openDevTools()
+	# mainWindow.openDevTools()
 
 
 setBrowserVisibility=(visibility)->
