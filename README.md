@@ -1,5 +1,12 @@
 # atom-dict
-用atom-shell实现的英汉字典
+用electron(atom-shell)实现的英汉字典
 
-激活快捷键 `ctrl+Space`
+编译
+`npm install && gulp build`
+
+启动
+`electron build/`
+
+激活快捷键 
+`shift+ctrl+Space`
 
