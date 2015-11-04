@@ -28,17 +28,15 @@ app.on 'updateSearchResult',(results)->
 
 	$('.result-part').html(html)
 
-	resultHeight=72*results.length
+	resultHeight=78*results.length
 
 	if resultHeight>350
 		console.log "larget"
 		$('.result-part').height(350)
-		# ...
-
 
 	console.log "new height #{resultHeight}"
 
-	app.emit('windowResultHeight',resultHeight)
+	app.emit('windowResultHeight',resultHeight+80)
 
 
 app.on 'onBrowserWindowHide',()->
