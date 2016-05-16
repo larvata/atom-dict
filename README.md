@@ -11,3 +11,4 @@ electron 1.0
 激活快捷键 
 `shift+ctrl+Space`
 
+骄阳和藏獒还有二毛,骚酱到此一游
