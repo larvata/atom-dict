@@ -27,11 +27,7 @@ const mainWindowProps = {
   frame: false
 };
 
-
-// const BrowserWindow = electron.BrowserWindow;
-
 let mainWindow;
-
 let dictLines = [];
 const loadDict=(dictName)=>{
   let path = `${__dirname}/dict/${dictName}.json`;
@@ -47,21 +43,13 @@ loadDict('edict2u_lite');
 
 const setBrowserPostion=()=>{
   const screen = electron.screen;
-  let displays = screen.getAllDisplays();
   let cursor = screen.getCursorScreenPoint();
 
-  let currentDisplay;
-  displays.some(display=>{
-    if (display.bounds.x < cursor.x) {
-      if (display.bounds.x + display.bounds.width > cursor.x) {
-        if (display.bounds.y < cursor.y) {
-          if (display.bounds.y + display.bounds.height > cursor.y) {
-            currentDisplay = display;
-            return true;
-          }
-        }
-      }
-    }
+  let currentDisplay = screen.getDisplayMatching({
+    x: cursor.x,
+    y:cursor.y,
+    width:0,
+    height:0
   });
 
   mainWindowProps.x = currentDisplay.bounds.x + (currentDisplay.bounds.width - mainWindowProps.width) / 2;
@@ -102,10 +90,9 @@ const createWindow=()=>{
   });
 };
 
-app.on('ready', createWindow);
-
-
 // init app
+app.dock.hide();
+app.on('ready', createWindow);
 app.on('window-all-closed', ()=>{
   if (process.platform !== 'darwin') {
     app.quit();
