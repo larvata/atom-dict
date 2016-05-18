@@ -35,14 +35,15 @@ app.on('updateSearchResult', results=>{
 });
 
 app.on('onBrowserWindowHide', ()=>{
-  searchBox.val('');
+  searchBox.value = '';
 });
 
 app.on('onBrowserWindowShow', ()=>{
+  searchBox.focus();
   let word = clipboard.readText('string').trim();
   if (/^\w+$/.test(word)) {
-    searchBox.val(word);
+    searchBox.value = word;
     app.emit('keyup', word);
-    searchBox[0].select();
+    searchBox.select();
   }
 });
