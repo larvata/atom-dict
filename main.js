@@ -1,30 +1,21 @@
-const fs = require('fs');
-const _ = require('underscore');
+import fs from 'fs';
+import _ from 'underscore';
+import electron, {app, BrowserWindow, globalShortcut} from 'electron';
 
-const electron = require('electron');
-
-const {app, BrowserWindow, globalShortcut} = electron;
-
-const APP_EVENTS={
-  'WINDOW_ALL_CLOSED': 'window-all-closed',
-  'READY': 'ready',
-  'KEY_UP': 'keyup',
-  'WINDOW_VISIBLE': 'windowVisible',
-  'WINDOW_RESULT_HEIGHT': 'windowResultHeight'
-};
-
-const BROWSER_WINDOW_EVENTS = {
-  'CLOSED': 'closed',
-  'BLUR': 'blur'
-};
-
-const SHOW_WINDOW_HOT_KEY = 'shift+ctrl+space';
+import {
+  BROWSER_WINDOW_EVENTS,
+  SHOW_WINDOW_HOT_KEY,
+  APP_EVENTS,
+  WORD_ENTITY_HEIGHT,
+  SEARCH_BOX_HEIGHT
+} from './common/const';
 
 const mainWindowProps = {
   height: 80,
   width: 500,
   alwaysOnTop: true,
-  frame: false
+  frame: false,
+  show: false
 };
 
 let mainWindow;
@@ -92,14 +83,14 @@ const createWindow=()=>{
 
 // init app
 app.dock.hide();
-app.on('ready', createWindow);
-app.on('window-all-closed', ()=>{
+app.on(APP_EVENTS.READY, createWindow);
+app.on(APP_EVENTS.WINDOW_ALL_CLOSED, ()=>{
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on(APP_EVENTS.KEY_UP, (keyword)=>{
+app.on(APP_EVENTS.CHANGE_SEARCH_TERM, (keyword)=>{
   let ret;
   if (keyword.length === 0) {
     ret = [];
@@ -114,18 +105,13 @@ app.on(APP_EVENTS.KEY_UP, (keyword)=>{
   }
 
   app.emit('updateSearchResult', ret);
+
+  // set window height
+  let resultsHeight = ret.length * WORD_ENTITY_HEIGHT + SEARCH_BOX_HEIGHT;
+  mainWindow.setSize(mainWindowProps.width, resultsHeight);
+
 });
 
 app.on(APP_EVENTS.WINDOW_VISIBLE, (visibility)=>{
   setBrowserVisibility(visibility);
-});
-
-app.on(APP_EVENTS.WINDOW_RESULT_HEIGHT, (height)=>{
-  const maxHeight = 500;
-
-  while (height > maxHeight) {
-    height -= 82;
-  }
-
-  mainWindow.setSize(mainWindowProps.width, height);
 });

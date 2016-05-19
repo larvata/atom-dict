@@ -45,26 +45,12 @@
   </style>
 </head>
 <body>
-  <div class="search-part">
-    <input type="text" class="search-box" autofocus >
-  </div>
-  <div class="result-part"></div>
 
-  <script id="resultTpl" type="text/template">
-    <% _.each(results,function(ret){ %>
-      <div class="result">
-        <div>
-        <span class="word"><%=ret.word%></span>
-        <span class="pron"><%=ret.pron%></span>
-        </div>
-        <div class="mean">
-        <%=ret.mean%>
-        </div>
-      </div>
-    <% }); %>
+  <script>
+    require('babel-register');
+    require('./app.js');
   </script>
-
-  <script src="./app.js"></script>
+  <div id="root"></div>
 
 </body>
 </html>
