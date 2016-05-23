@@ -44,11 +44,15 @@
   }
   </style>
 </head>
-<body>
+<body onkeypress="return focusSearchBox(event);">
 
   <script>
     require('babel-register');
     require('./app.js');
+
+    function focusSearchBox(){
+      document.querySelector('input').focus();
+    }
   </script>
   <div id="root"></div>
 

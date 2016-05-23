@@ -27,6 +27,8 @@ export class App extends Component {
     app.on(APP_EVENTS.ON_BROWSER_WINDOW_HIDE, ()=>{
       this.setState({
         searchTerm: ''
+      }, ()=>{
+        app.emit(APP_EVENTS.CHANGE_SEARCH_TERM, this.state.searchTerm);
       });
     });
 
