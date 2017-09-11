@@ -1,8 +1,11 @@
-// const ReactDOM = require('react-dom');
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {App} from './components/App';
+const React = require('react');
+const ReactDOM = require('react-dom');
+const importJsx = require('import-jsx');
 
-window.onload = ()=>{
-  ReactDOM.render(<App />, document.getElementById('root'));
+const App = importJsx('./components/App');
+
+window.onload = () => {
+  ReactDOM.render(
+    React.createElement(App),
+    document.getElementById('root'));
 };

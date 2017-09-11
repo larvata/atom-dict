@@ -1,63 +1,68 @@
-import React, {Component} from 'react';
-import {SearchBox} from './SearchBox';
-import {WordList} from './WordList';
-import {APP_EVENTS} from '../common/const';
+const { remote, clipboard } = require('electron');
 
-import {remote, clipboard}  from 'electron';
-const {app} = remote;
+const React = require('react');
+const importJsx = require('import-jsx');
 
-export class App extends Component {
-  constructor(props){
+const SearchBox = importJsx('./SearchBox');
+const WordList = importJsx('./WordList');
+const APP_CONSTANTS = require('../common/constants');
+
+const { app } = remote;
+const { Component } = React;
+const { APP_EVENTS } = APP_CONSTANTS;
+
+class App extends Component {
+  constructor(props) {
     super(props);
 
     this.state = {
       searchTerm: '',
       searchResults: [],
-      autoSelect: true
+      autoSelect: true,
     };
   }
 
-  componentDidMount(){
-    app.on(APP_EVENTS.UPDATE_SEARCH_RESULT, results=>{
+  componentDidMount() {
+    app.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (results) => {
       this.setState({
-        searchResults: results
+        searchResults: results,
       });
     });
 
-    app.on(APP_EVENTS.ON_BROWSER_WINDOW_HIDE, ()=>{
+    app.on(APP_EVENTS.ON_BROWSER_WINDOW_HIDE, () => {
       this.setState({
-        searchTerm: ''
-      }, ()=>{
+        searchTerm: '',
+      }, () => {
         app.emit(APP_EVENTS.CHANGE_SEARCH_TERM, this.state.searchTerm);
       });
     });
 
-    app.on(APP_EVENTS.ON_BROWSER_WINDOW_SHOW, ()=>{
-      let word = clipboard.readText('string').trim();
+    app.on(APP_EVENTS.ON_BROWSER_WINDOW_SHOW, () => {
+      const word = clipboard.readText('string').trim();
       if (/^\w+$/.test(word)) {
         this._retrieveSearchResults(word, true);
       }
-      else{
+      else {
         this.setState({
-          autoSelect: false
+          autoSelect: false,
         });
       }
     });
   }
 
-  searchTermChangeHandler(event){
-    let value = event.target.value;
+  searchTermChangeHandler(event) {
+    const { value } = event.target;
     this._retrieveSearchResults(value, false);
   }
 
-  _retrieveSearchResults(value, autoSelect){
-    this.setState({searchTerm: value, autoSelect}, ()=>{
+  _retrieveSearchResults(value, autoSelect) {
+    this.setState({ searchTerm: value, autoSelect }, () => {
       app.emit(APP_EVENTS.CHANGE_SEARCH_TERM, value);
     });
   }
 
-  _appKeyUpHandler(event){
-    let keyCode = event.keyCode;
+  _appKeyUpHandler(event) {
+    const keyCode = event.keyCode;
     if (keyCode === 27) {
       // escape: close window
       app.emit(APP_EVENTS.WINDOW_VISIBLE, false);
@@ -65,7 +70,7 @@ export class App extends Component {
   }
 
   render() {
-    const {searchTerm, searchResults, autoSelect} = this.state;
+    const { searchTerm, searchResults, autoSelect } = this.state;
     return (
       <div onKeyUp={this._appKeyUpHandler}>
         <SearchBox onChange={this.searchTermChangeHandler.bind(this)} value={searchTerm} autoSelect={autoSelect} />
@@ -74,3 +79,5 @@ export class App extends Component {
     );
   }
 }
+
+module.exports = App;

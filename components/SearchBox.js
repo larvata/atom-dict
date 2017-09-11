@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+const React = require('react');
 
-export class SearchBox extends Component {
+const { Component } = React;
 
-  componentDidMount(){
+class SearchBox extends Component {
+  componentDidMount() {
     this.refs.input.focus();
   }
 
-  componentDidUpdate(){
-    const {autoSelect} = this.props;
+  componentDidUpdate() {
+    const { autoSelect } = this.props;
 
     if (autoSelect) {
       this.refs.input.select();
@@ -16,7 +16,7 @@ export class SearchBox extends Component {
   }
 
   render() {
-    const {value, onChange} = this.props;
+    const { value, onChange } = this.props;
     return (
       <div className="search-part">
         <input ref="input" type="text" className="search-box" onChange={onChange} value={value} />
@@ -24,3 +24,5 @@ export class SearchBox extends Component {
     );
   }
 }
+
+module.exports = SearchBox;

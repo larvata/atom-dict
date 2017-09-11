@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+const React = require('react');
 
-export class WordList extends Component {
+const { Component } = React;
 
-  _renderSearchResults(){
-    const {words} = this.props;
-    let result  = words.map((word, index)=>{
+class WordList extends Component {
+  _renderSearchResults() {
+    const { words } = this.props;
+    const result = words.map((word, index) => {
       return (
         <div className="result" key={index}>
           <div>
@@ -12,8 +13,7 @@ export class WordList extends Component {
             <span className="pron">{word.pron}</span>
           </div>
           <div className="mean">{word.mean}</div>
-          </div>
-        );
+        </div>);
     });
 
     return result;
@@ -27,3 +27,5 @@ export class WordList extends Component {
     );
   }
 }
+
+module.exports = WordList;

@@ -1,7 +1,7 @@
 {
   "name": "atom-alfred",
   "version": "1.1.1",
-  "main": "bootstrap.js",
+  "main": "main.js",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,16 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "electron": "^1.7.6",
+    "import-jsx": "^1.3.0",
+    "jp-conversion": "0.0.7",
     "react": "^15.0.2",
-    "react-dom": "^15.0.2",
-    "underscore": "^1.8.3"
+    "react-dom": "^15.0.2"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.5.0",
-    "babel-register": "^6.9.0",
-    "eslint": "^2.10.1",
-    "eslint-plugin-react": "^5.1.1",
-    "jp-conversion": "0.0.7"
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.3.0"
   }
 }
