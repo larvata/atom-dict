@@ -1,7 +1,12 @@
 const electron = require('electron');
 const fs = require('fs');
 
-const { app, BrowserWindow, globalShortcut } = electron;
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+} = electron;
+
 const {
   BROWSER_WINDOW_EVENTS,
   SHOW_WINDOW_HOT_KEY,
@@ -16,6 +21,9 @@ const mainWindowProps = {
   alwaysOnTop: true,
   frame: false,
   show: false,
+  webPreferences: {
+    nodeIntegration: true,
+  },
 };
 
 let mainWindow;
@@ -33,7 +41,7 @@ loadDict('youdao_lite');
 loadDict('edict2u_lite');
 
 const setBrowserPostion = () => {
-  const screen = electron.screen;
+  const { screen } = electron;
   const cursor = screen.getCursorScreenPoint();
 
   const currentDisplay = screen.getDisplayMatching({
@@ -43,8 +51,10 @@ const setBrowserPostion = () => {
     height: 0,
   });
 
-  mainWindowProps.x = currentDisplay.bounds.x + ((currentDisplay.bounds.width - mainWindowProps.width) / 2);
-  mainWindowProps.y = currentDisplay.bounds.y + ((currentDisplay.bounds.height - mainWindowProps.height) / 2);
+  mainWindowProps.x = currentDisplay.bounds.x
+    + ((currentDisplay.bounds.width - mainWindowProps.width) / 2);
+  mainWindowProps.y = currentDisplay.bounds.y
+    + ((currentDisplay.bounds.height - mainWindowProps.height) / 2);
   mainWindow.setPosition(mainWindowProps.x, mainWindowProps.y);
 };
 
@@ -53,8 +63,7 @@ const setBrowserVisibility = (visibility) => {
     setBrowserPostion();
     mainWindow.show();
     app.emit('onBrowserWindowShow');
-  }
-  else {
+  } else {
     app.emit('onBrowserWindowHide');
     mainWindow.hide();
   }
@@ -64,8 +73,8 @@ const setBrowserVisibility = (visibility) => {
 const createWindow = () => {
   mainWindow = new BrowserWindow(mainWindowProps);
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
-  mainWindow.webContents.openDevTools();
+  mainWindow.loadFile('index.html');
+  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -93,15 +102,10 @@ app.on(APP_EVENTS.CHANGE_SEARCH_TERM, (keyword) => {
   let ret;
   if (keyword.length === 0) {
     ret = [];
-  }
-  else {
-    // ret = _.chain(dictLines)
-    //   .filter(dict => {
-    //     return dict.indexer.indexOf(keyword.toLowerCase()) === 0;
-    //   })
-    //   .sortBy(word=>word.word.length)
-    //   .take(4).value();
-    ret = dictLines.filter(dl => dl.indexer.includes(keyword.toLowerCase())).sort().slice(0, 4);
+  } else {
+    // ret = dictLines.filter(dl => dl.indexer.includes(keyword.toLowerCase())).sort((a, b) => a.length - b.length).slice(0, 4);
+    const matches = dictLines.filter(dl => dl.indexer.includes(keyword.toLowerCase()));
+    ret = matches.filter(m => m.indexer.startsWith(keyword.toLowerCase())).sort().slice(0, 4);
   }
 
   app.emit('updateSearchResult', ret);
