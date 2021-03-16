@@ -5,6 +5,7 @@ const {
   app,
   BrowserWindow,
   globalShortcut,
+  ipcMain,
 } = electron;
 
 const {
@@ -23,6 +24,7 @@ const mainWindowProps = {
   show: false,
   webPreferences: {
     nodeIntegration: true,
+    contextIsolation: false,
   },
 };
 
@@ -62,13 +64,12 @@ const setBrowserVisibility = (visibility) => {
   if (visibility) {
     setBrowserPostion();
     mainWindow.show();
-    app.emit('onBrowserWindowShow');
+    mainWindow.webContents.send('onBrowserWindowShow');
   } else {
-    app.emit('onBrowserWindowHide');
+    mainWindow.webContents.send('onBrowserWindowHide');
     mainWindow.hide();
   }
 };
-
 
 const createWindow = () => {
   mainWindow = new BrowserWindow(mainWindowProps);
@@ -91,14 +92,18 @@ const createWindow = () => {
 
 // init app
 app.dock.hide();
-app.on(APP_EVENTS.READY, createWindow);
+app.whenReady().then(createWindow).catch(console.log);
 app.on(APP_EVENTS.WINDOW_ALL_CLOSED, () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on(APP_EVENTS.CHANGE_SEARCH_TERM, (keyword) => {
+ipcMain.on(APP_EVENTS.WINDOW_VISIBLE, (event, visibility) => {
+  setBrowserVisibility(visibility);
+});
+
+ipcMain.on(APP_EVENTS.CHANGE_SEARCH_TERM, (event, keyword) => {
   let ret;
   if (keyword.length === 0) {
     ret = [];
@@ -108,13 +113,9 @@ app.on(APP_EVENTS.CHANGE_SEARCH_TERM, (keyword) => {
     ret = matches.filter(m => m.indexer.startsWith(keyword.toLowerCase())).sort().slice(0, 4);
   }
 
-  app.emit('updateSearchResult', ret);
+  event.sender.send(APP_EVENTS.UPDATE_SEARCH_RESULT, ret);
 
   // set window height
   const resultsHeight = (ret.length * WORD_ENTITY_HEIGHT) + SEARCH_BOX_HEIGHT;
   mainWindow.setSize(mainWindowProps.width, resultsHeight);
-});
-
-app.on(APP_EVENTS.WINDOW_VISIBLE, (visibility) => {
-  setBrowserVisibility(visibility);
 });

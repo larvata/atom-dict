@@ -1,4 +1,4 @@
-const { remote, clipboard } = require('electron');
+const { ipcRenderer, clipboard } = require('electron');
 
 const React = require('react');
 const importJsx = require('import-jsx');
@@ -7,7 +7,6 @@ const SearchBox = importJsx('./SearchBox');
 const WordList = importJsx('./WordList');
 const APP_CONSTANTS = require('../common/constants');
 
-const { app } = remote;
 const { Component } = React;
 const { APP_EVENTS } = APP_CONSTANTS;
 
@@ -23,21 +22,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    app.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (results) => {
+    ipcRenderer.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (event, results) => {
       this.setState({
         searchResults: results,
       });
     });
 
-    app.on(APP_EVENTS.ON_BROWSER_WINDOW_HIDE, () => {
+    ipcRenderer.on(APP_EVENTS.ON_BROWSER_WINDOW_HIDE, (event) => {
       this.setState({
         searchTerm: '',
       }, () => {
-        app.emit(APP_EVENTS.CHANGE_SEARCH_TERM, this.state.searchTerm);
+        ipcRenderer.send(APP_EVENTS.CHANGE_SEARCH_TERM, this.state.searchTerm);
       });
     });
 
-    app.on(APP_EVENTS.ON_BROWSER_WINDOW_SHOW, () => {
+    ipcRenderer.on(APP_EVENTS.ON_BROWSER_WINDOW_SHOW, () => {
       const word = clipboard.readText('string').trim();
       if (/^\w+$/.test(word)) {
         this._retrieveSearchResults(word, true);
@@ -57,7 +56,7 @@ class App extends Component {
 
   _retrieveSearchResults(value, autoSelect) {
     this.setState({ searchTerm: value, autoSelect }, () => {
-      app.emit(APP_EVENTS.CHANGE_SEARCH_TERM, value);
+      ipcRenderer.send(APP_EVENTS.CHANGE_SEARCH_TERM, value);
     });
   }
 
@@ -65,7 +64,7 @@ class App extends Component {
     const keyCode = event.keyCode;
     if (keyCode === 27) {
       // escape: close window
-      app.emit(APP_EVENTS.WINDOW_VISIBLE, false);
+      ipcRenderer.send(APP_EVENTS.WINDOW_VISIBLE, false);
     }
   }
 
