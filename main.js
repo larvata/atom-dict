@@ -64,10 +64,11 @@ const setBrowserVisibility = (visibility) => {
   if (visibility) {
     setBrowserPostion();
     mainWindow.show();
+    mainWindow.setVisibleOnAllWorkspaces(true);
     mainWindow.webContents.send('onBrowserWindowShow');
   } else {
-    mainWindow.webContents.send('onBrowserWindowHide');
     mainWindow.hide();
+    mainWindow.webContents.send('onBrowserWindowHide');
   }
 };
 
@@ -75,7 +76,6 @@ const createWindow = () => {
   mainWindow = new BrowserWindow(mainWindowProps);
 
   mainWindow.loadFile('index.html');
-  // mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;
