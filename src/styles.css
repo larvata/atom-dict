@@ -1,0 +1,39 @@
+/* styles.css */
+
+/* Add styles here to customize the appearance of your app */
+
+.search-box{
+  font-size: 3em;
+  width: 480px;
+}
+
+.word{
+  font-size:1.6em;
+}
+
+.pron{
+  font-family: 'lucida sans unicode';
+  float:right;
+  font-size:16px;
+}
+
+.mean{
+  font-size: 13px;
+}
+
+.word-wrap{
+  padding: 5px;
+  margin: 5px 0px 5px 0px;
+  background: rgb(230,230,230);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.word-container{
+  margin: 5px 0px 5px 0px;
+  overflow-y: scroll;
+}
+
+body{
+  overflow: hidden;
+}

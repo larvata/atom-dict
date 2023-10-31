@@ -1,9 +1,7 @@
-var fs = require('fs');
-var readline = require('readline');
-var jpconv = require('jp-conversion');
+const path = require('path');
+const fs = require('fs');
 
-
-var phoneticConvert = function(src){
+const phoneticConvert = function(src){
   src=src.replace(/\[.*\]/,'').split('/').map(function(ele){
     if (ele.length !== 0) {
       return '[' + ele + ']';
@@ -30,19 +28,18 @@ var phoneticConvert = function(src){
     .replace(/R/g,'ʌ')
     .replace(/S/g,'ɝ')
 
-    .replace(/\'/g,'ˈ')
-    .replace(/\,/g,'ˌ');
+    .replace(/'/g,'ˈ')
+    .replace(/,/g,'ˌ');
   return src;
 };
 
+const DICT_PATH = 'dictdata/youdao';
+const OUTPUT_PATH = path.join(__dirname, '../src/dictdata', 'youdao.json');
 
-
-var loadDict = function(){
-  var path = "#{__dirname}/../src/dict/youdao";
-  var outPath =  "#{__dirname}/../src/dict/youdao_lite.json";
+const loadDict = function(){
   var entries = [];
 
-  fs.readFile(path,'utf8',function(err,data){
+  fs.readFile(DICT_PATH,'utf8',function(err,data){
     var ret = data.split('\n');
     var conter = 0;
     ret.forEach(function(rowEntry){
@@ -52,7 +49,9 @@ var loadDict = function(){
       var entry = {
         word: array[0],
         pron: phoneticConvert(array[1]),
-        mean: array[2],
+        means: [{
+          expl: [array[2]],
+        }],
         indexer: array[0].toLowerCase()
       };
 
@@ -63,7 +62,7 @@ var loadDict = function(){
       entries.push(entry);
     });
 
-    fs.writeFileSync(outPath,JSON.stringify(entries));
+    fs.writeFileSync(OUTPUT_PATH,JSON.stringify(entries, null, 2));
     console.log("done");
   });
 };
