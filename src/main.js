@@ -119,8 +119,8 @@ ipcMain.on(APP_EVENTS.CHANGE_SEARCH_TERM, (event, keyword) => {
   if (keyword.length === 0) {
     ret = [];
   } else {
-    const matches = dictLines.filter(dl => dl.indexer.includes(keyword.toLowerCase()));
-    ret = matches.filter(m => m.indexer.startsWith(keyword.toLowerCase()))
+    const matches = dictLines.filter(dl => dl.indexer.some((ider) => ider.includes(keyword.toLowerCase())));
+    ret = matches.filter(m => m.indexer.some((ider) => ider.startsWith(keyword.toLowerCase())))
       .sort()
       .slice(0, 25);
   }
@@ -138,5 +138,5 @@ ipcMain.on(APP_EVENTS.SET_ENTRY_HEIGHT, (event, options) => {
 setTimeout(() => {
   loadDict('JMdict_e');
   loadDict('moji');
-  loadDict('youdao');
+  loadDict('stardict');
 }, 1000)

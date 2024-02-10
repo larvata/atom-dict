@@ -34,6 +34,32 @@
   overflow-y: scroll;
 }
 
+.btn-copy-as-markdown svg {
+  padding: 0 5px;
+}
+
+.btn-copy-as-markdown svg:hover {
+  fill: blue;
+}
+
+.btn-add-to-anki svg {
+  transition: 0.5s;
+}
+
+.btn-add-to-anki svg:hover {
+  transform: rotateY(180deg);
+}
+
+.action-button {
+  width: 24px;
+  heigh: 24px;
+  cursor: pointer;
+}
+
+.action-button svg {
+  cursor: pointer;
+}
+
 body{
   overflow: hidden;
 }

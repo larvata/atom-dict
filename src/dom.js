@@ -3,8 +3,9 @@ function createDOM(type, options, ...children) {
   if (typeof options === 'string') {
     container.className = options;
   } else {
-    const { className, ...restOpts } = options;
+    const { className, innerHTML, ...restOpts } = options;
     container.className = className;
+    container.innerHTML = innerHTML;
 
     Object.keys(restOpts).forEach((k) => {
       if (!k.startsWith('on')) {

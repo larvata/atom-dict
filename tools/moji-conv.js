@@ -3,6 +3,7 @@ const fs = require("fs");
 const sax = require("sax");
 const { default: Mdict } = require('js-mdict');
 var jpconv = require('jp-conversion');
+const { uniq } = require('./utils');
 
 const DICT_PATH = 'dictdata/moji.mdx';
 const OUTPUT_PATH = path.join(__dirname, '../src/dictdata', 'moji.json');
@@ -128,12 +129,23 @@ true && (async () => {
     let entry = cache[word];
     if (!entry) {
       // console.log({word, pron, data})
+
+      const pword = word.replace(/[◎①②③④⑤⑥]/, () => '');
+      const cword = jpconv.convert(pword || '');
+      const cpron = jpconv.convert(pron || '');
+
       entry = {
         word,
         pron,
-        indexer: jpconv
-          .romanise(pron || word)
-          .replace(/[◎①②③④⑤⑥]/, () => ''),
+        indexer: uniq([
+          pword,
+          cword.hiragana,
+          cword.romaji,
+          cword.romaji && cword.romaji.replace(/ /g, '').replace(/・/g, '').replace(/-/g, ''),
+          cpron.hiragana,
+          cpron.romaji,
+          cpron.romaji && cpron.romaji.replace(/ /g, '').replace(/・/g, '').replace(/-/g, ''),
+        ]),
       };
       cache[word] = entry;
     }

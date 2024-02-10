@@ -11,3 +11,6 @@ electron 1.0
 激活快捷键 
 `shift+ctrl+Space`
 
+
+
+http://ftp.edrdg.org/pub/Nihongo/00INDEX.html

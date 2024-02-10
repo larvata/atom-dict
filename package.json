@@ -4,11 +4,13 @@
   "main": "src/main.js",
   "description": "A Electron Dictionary",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "debug": "electron --inspect ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csv-parse": "^5.5.3"
   },
   "devDependencies": {
     "electron": "^27.0.2",

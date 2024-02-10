@@ -1,7 +1,8 @@
 const path = require('path');
 const fs = require("fs");
 const sax = require("sax");
-var jpconv = require('jp-conversion');
+const jpconv = require('jp-conversion');
+const { uniq } = require('./utils');
 
 // http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
 const DICT_PATH = 'dictdata/JMdict_e';
@@ -58,14 +59,26 @@ function processEntry(entry) {
     gloss,
     pos,
   } = entry;
+
+  const ckeb = jpconv.convert(keb || '');
+  const creb = jpconv.convert(reb || '');
+
   entries.push({
     word: keb || reb,
     pron: reb,
     means: [{
       pos,
-      expl: gloss,
+      expl: [gloss],
     }],
-    indexer: jpconv.romanise(reb),
+    indexer: uniq([
+      keb,
+      ckeb.hiragana,
+      ckeb.romaji && ckeb.romaji,
+      ckeb.romaji && ckeb.romaji.replace(/ /g, '').replace(/・/g, '').replace(/-/g, ''),
+      creb.hiragana,
+      creb.romaji && creb.romaji,
+      creb.romaji && creb.romaji.replace(/ /g, '').replace(/・/g, '').replace(/-/g, ''),
+    ]),
   });
 }
 
