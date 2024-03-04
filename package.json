@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "electron": "^27.0.2",
-    "electron-builder": "^24.6.4",
+    "electron-builder": "^24.13.3",
     "eslint": "^8.52.0",
     "jp-conversion": "^0.0.7",
     "js-mdict": "^5.0.2",
