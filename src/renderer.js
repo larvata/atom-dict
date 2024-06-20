@@ -69,22 +69,11 @@ ipcRenderer.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (event, results) => {
   const wordList = results.map((w) => {
     const means = [];
 
-    const markdown = [`**${w.word}** *${w.pron}*`];
-    w.means.forEach((mean) => {
-      mean.expl.forEach((expl) => {
-        `${mean.pos || ''}${expl}`.split('\\n').forEach((l) => {
-          markdown.push(`- ${l.trim()}`);
-          means.push(div('', text(l.trim())));
-        })
-      })
-    });
-    markdown.push('');
-    markdown.push('');
-
     let pron = w.pron || '';
     if (pron && !pron.startsWith('[')) {
       pron = `[${pron}]`;
     }
+
     const ankiBody = {
       action: 'addNote',
       params: {
@@ -109,6 +98,18 @@ ipcRenderer.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (event, results) => {
         }
       }
     };
+
+    const markdown = [`**${w.word}** *${w.pron}*`];
+    w.means.forEach((mean) => {
+      mean.expl.forEach((expl) => {
+        `${mean.pos || ''}${expl}`.split('\\n').forEach((l) => {
+          markdown.push(`- ${l.trim()}`);
+          means.push(div('', text(l.trim())));
+        })
+      })
+    });
+    markdown.push('');
+    markdown.push('');
 
     return div('word-wrap',
       div('entry',
@@ -137,6 +138,20 @@ ipcRenderer.on(APP_EVENTS.UPDATE_SEARCH_RESULT, (event, results) => {
             }
           }),
         ),
+        span({
+          className: 'btn-play-tts action-button pron tts',
+          innerHTML: '<span>🔊</span>',
+          onClick: (event) => {
+            event.preventDefault();
+            const text = new SpeechSynthesisUtterance(w.word);
+            if (w.lang === 'ja-JP') {
+              text.lang = w.lang;
+              text.voiceURI = 'Google 日本人';
+            }
+            speechSynthesis.speak(text);
+            searchBoxInput.focus();
+          },
+        }),
         span('pron', text(pron)),
       ),
       div('mean',

@@ -17,6 +17,11 @@
   font-size:16px;
 }
 
+.tts{
+  width: unset !important;
+  margin-left: 5px;
+}
+
 .mean{
   font-size: 13px;
 }

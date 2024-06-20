@@ -136,7 +136,7 @@ ipcMain.on(APP_EVENTS.SET_ENTRY_HEIGHT, (event, options) => {
 })
 
 setTimeout(() => {
-  loadDict('JMdict_e');
-  loadDict('moji');
-  loadDict('stardict');
+  loadDict('JMdict_e', 'ja-JP');
+  loadDict('moji', 'ja-JP');
+  loadDict('stardict', 'en-US');
 }, 1000)
